@@ -1,0 +1,638 @@
+{
+  "western": [
+    {
+      "id": "1",
+      "name": "Noir Charm Dress",
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "2XL"
+      ],
+      "image": "/public/images/western-1.webp",
+      "details": {
+        "color": "Black",
+        "type": "Casual",
+        "fabric": "Shiffon"
+      },
+      "category": "western",
+      "oldPrice": "3100",
+      "newPrice": "2999",
+      "price": "",
+      "inStock": false
+    },
+    {
+      "id": "2",
+      "name": "Royal Azure Gown",
+      "oldPrice": "4000",
+      "newPrice": "3600",
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "2XL"
+      ],
+      "image": "/public/images/western-2.jpeg",
+      "details": {
+        "color": "Blue",
+        "type": "partywear",
+        "fabric": "Silk"
+      },
+      "category": "western",
+      "price": "",
+      "inStock": true
+    },
+    {
+      "id": "3",
+      "name": "Peach Grace",
+      "oldPrice": "3300",
+      "newPrice": "3100",
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "2XL"
+      ],
+      "image": "/public/images/western-3.png",
+      "details": {
+        "color": "Peach",
+        "type": "Long sleeve",
+        "fabric": "shiffon"
+      },
+      "category": "western",
+      "inStock": true
+    },
+    {
+      "id": "4",
+      "name": "Sunny Bloom Dress",
+      "oldPrice": "3200",
+      "newPrice": "3000",
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "2XL"
+      ],
+      "image": "/public/images/western-4.webp",
+      "details": {
+        "color": "Yellow",
+        "type": "casual",
+        "fabric": "cotton"
+      },
+      "category": "western",
+      "inStock": true
+    },
+    {
+      "id": "5",
+      "name": "Tiered short midi",
+      "oldPrice": "2500",
+      "newPrice": "2300",
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "2XL"
+      ],
+      "image": "/public/images/western-5.webp",
+      "details": {
+        "color": "Red",
+        "type": "Sweater",
+        "fabric": "thread"
+      },
+      "category": "western",
+      "inStock": true
+    },
+    {
+      "id": "6",
+      "name": " Sweater short",
+      "oldPrice": "3500",
+      "newPrice": "3300",
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "2XL"
+      ],
+      "image": "/public/images/western-6.webp",
+      "details": {
+        "color": "White",
+        "type": "Sweater",
+        "fabric": "thread"
+      },
+      "category": "western",
+      "inStock": true
+    },
+    {
+      "id": "7",
+      "name": "Navy blue short sleeve",
+      "oldPrice": "3299",
+      "newPrice": "3200",
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "2XL"
+      ],
+      "image": "/public/images/western-7.webp",
+      "details": {
+        "color": "Blue",
+        "type": "Gown",
+        "fabric": "Silky smooth"
+      },
+      "category": "western",
+      "inStock": true
+    },
+    {
+      "id": "8",
+      "name": "Rasin Aura Purple Flow Dress",
+      "oldPrice": "4500",
+      "newPrice": "4300",
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "2XL"
+      ],
+      "image": "/public/images/western-8.avif",
+      "details": {
+        "color": "Purple",
+        "type": "Partywear",
+        "fabric": "Silk"
+      },
+      "category": "western",
+      "inStock": true
+    }
+  ],
+  "bags": [
+    {
+      "id": "1",
+      "name": "Carmilla Classic Tan Satchel",
+      "oldPrice": "2799",
+      "newPrice": "2799",
+      "image": "/public/images/bag-1.avif",
+      "details": {
+        "color": "Camel Brown with Dark Chocolate Handles",
+        "material": "Textured Vegan Leather",
+        "style": "Structured Satchel",
+        "features": "Dual top handles, adjustable shoulder strap, gold-tone hardware, inner zip compartment"
+      },
+      "category": "bags",
+      "inStock": true
+    },
+    {
+      "id": "2",
+      "name": "Ivory Classic Tote",
+      "oldPrice": "2799",
+      "newPrice": "2799",
+      "image": "/public/images/bag-2.jpg",
+      "details": {
+        "color": "Ivory Beige",
+        "material": "Vegan Leather",
+        "style": "Structured Tote",
+        "features": "Double handle, spacious interior, magnetic closure"
+      },
+      "category": "bags",
+      "inStock": false
+    },
+    {
+      "id": "4",
+      "name": "Snow White Work Bag",
+      "oldPrice": "2799",
+      "newPrice": "2799",
+      "image": "/public/images/bag-4.jpg",
+      "details": {
+        "color": "White",
+        "material": "Textured PU Leather",
+        "style": "Office Shoulder Bag",
+        "features": "Adjustable strap, buckle detail, soft lining"
+      },
+      "category": "bags",
+      "inStock": true
+    },
+    {
+      "id": "5",
+      "name": "Teal Luxe Shopper",
+      "oldPrice": "2799",
+      "newPrice": "2799",
+      "image": "/public/images/bag-5.avif",
+      "details": {
+        "color": "Teal Blue",
+        "material": "Matte PU Leather",
+        "style": "Minimal Shopper Tote",
+        "features": "Durable handles, zipper closure, laptop friendly"
+      },
+      "category": "bags",
+      "inStock": true
+    },
+    {
+      "id": "6",
+      "name": "Cream Braided Sling",
+      "oldPrice": "2799",
+      "newPrice": "2799",
+      "image": "/public/images/bag-6.avif",
+      "details": {
+        "color": "Cream",
+        "material": "Soft Vegan Leather",
+        "style": "Mini Sling Bag",
+        "features": "Braided handle,detachable strap,  magnetic flap"
+      },
+      "category": "bags",
+      "inStock": true
+    },
+    {
+      "id": "1761803297674",
+      "name": "Louis Sling Bag",
+      "oldPrice": "2000",
+      "newPrice": "1800",
+      "image": "https://in.louisvuitton.com/images/is/image/lv/1/P…bb--M26686_PM2_Front%20view.png?wid=2400&hei=2400",
+      "details": {
+        "color": "Black",
+        "material": "leather",
+        "style": "SlingBag"
+      },
+      "category": "bags",
+      "inStock": true
+    }
+  ],
+  "shoes": [
+    {
+      "id": "1",
+      "name": "Terracotta Suede Pointed Pumps",
+      "oldPrice": "2799",
+      "newPrice": "2799",
+      "size": "",
+      "image": "/public/images/shoe-1.jpg",
+      "details": {
+        "color": "Terracotta Brown",
+        "material": "Soft Suede",
+        "style": "Classic Pointed-Toe Pumps",
+        "heelHeight": "3.5 inches",
+        "features": "Slip-on design, cushioned insole, durable outsole"
+      },
+      "category": "shoes",
+      "inStock": false
+    },
+    {
+      "id": "2",
+      "name": "Midnight Spark Sling Heels",
+      "oldPrice": "2799",
+      "newPrice": "2799",
+      "size": "",
+      "image": "/public/images/shoe-2.avif",
+      "details": {
+        "color": "Jet Black",
+        "material": "Glitter Finish Faux Leather",
+        "style": "Slingback Heels",
+        "heelHeight": "3 inches",
+        "features": "Adjustable strap, sparkly texture, padded footbed"
+      },
+      "category": "shoes",
+      "inStock": true
+    },
+    {
+      "id": "3",
+      "name": "Champagne Grace Kitten Heels",
+      "oldPrice": "2799",
+      "newPrice": "2799",
+      "size": "",
+      "image": "/public/images/shoe-3.avif",
+      "details": {
+        "color": "Champagne Gold",
+        "material": "Satin with Metallic Straps",
+        "style": "Kitten Heels",
+        "heelHeight": "2 inches",
+        "features": "Cross strap design, pointed toe, lightweight sole"
+      },
+      "category": "shoes",
+      "inStock": true
+    },
+    {
+      "id": "4",
+      "name": "Pearl Bow Comfort Pumps",
+      "oldPrice": "2799",
+      "newPrice": "2799",
+      "size": "",
+      "image": "/public/images/shoe-4.jpg",
+      "details": {
+        "color": "Ivory Pearl",
+        "material": "Patent Faux Leather",
+        "style": "Low Heel Pumps",
+        "heelHeight": "1.5 inches",
+        "features": "Bow accent, slip-on design, anti-slip sole"
+      },
+      "category": "shoes",
+      "inStock": true
+    },
+    {
+      "id": "5",
+      "name": "Noir Everyday Flats",
+      "oldPrice": "2799",
+      "newPrice": "2799",
+      "size": "",
+      "image": "/public/images/shoe-5.avif",
+      "details": {
+        "color": "Matte Black",
+        "material": "Smooth PU Leather",
+        "style": "Ballet Flats",
+        "heelHeight": "Flat",
+        "features": "Flexible sole, cushioned lining, slip-on comfort fit"
+      },
+      "category": "shoes",
+      "inStock": true
+    },
+    {
+      "id": "6",
+      "name": "Onyx Luxe Pointed Sling Heels",
+      "oldPrice": "2799",
+      "newPrice": "2799",
+      "size": "",
+      "image": "/public/images/shoe-6.avif",
+      "details": {
+        "color": "Glossy Black",
+        "material": "Patent Faux Leather",
+        "style": "Pointed Slingback Heels",
+        "heelHeight": "3 inches",
+        "features": "Gold-tone buckle, pointed toe, padded footbed"
+      },
+      "category": "shoes",
+      "inStock": true
+    }
+  ],
+  "users": [
+    {
+      "id": "986d",
+      "joinDate": "2025-10-24T15:19:46.707Z",
+      "fullName": "anhi",
+      "email": "ania@gamil.com",
+      "password": "97455817",
+      "isBlock": false,
+      "cart": [],
+      "wishlist": [],
+      "orders": [],
+      "blocked": false,
+      "isAdmin": true
+    },
+    {
+      "id": "d4e7",
+      "joinDate": "2025-10-24T15:21:45.562Z",
+      "fullName": "anshi",
+      "email": "sdw@gmail.com",
+      "password": "12345678",
+      "isBlock": false,
+      "cart": [],
+      "wishlist": [],
+      "orders": [],
+      "blocked": true,
+      "isAdmin": false
+    },
+    {
+      "id": "c4c3",
+      "joinDate": "2025-10-24T15:46:16.612Z",
+      "fullName": "riya",
+      "email": "riya@gmail.com",
+      "password": "12345678",
+      "isBlock": false,
+      "cart": [],
+      "wishlist": [],
+      "orders": [],
+      "blocked": false,
+      "isAdmin": true
+    },
+    {
+      "id": "ce76",
+      "joinDate": "2025-10-25T09:41:23.234Z",
+      "fullName": "irfan",
+      "email": "irfan@gmail.com",
+      "password": "irfanbaby",
+      "isBlock": false,
+      "cart": [],
+      "wishlist": [],
+      "orders": [],
+      "isAdmin": false
+    },
+    {
+      "id": "b060",
+      "joinDate": "2025-10-25T09:53:44.525Z",
+      "fullName": "anshi",
+      "email": "anshi@gmail.com",
+      "password": "12345678",
+      "isBlock": false,
+      "cart": [],
+      "wishlist": [],
+      "orders": []
+    },
+    {
+      "id": "09a0",
+      "joinDate": "2025-10-26T10:39:35.672Z",
+      "fullName": "rayann",
+      "email": "raya@gmail.com",
+      "password": "12345678",
+      "isBlock": false,
+      "cart": [],
+      "wishlist": [],
+      "orders": []
+    },
+    {
+      "id": "8cd1",
+      "joinDate": "2025-10-27T09:02:48.438Z",
+      "fullName": "anshifa",
+      "email": "anu@gmail.com",
+      "password": "12345678",
+      "isBlock": false,
+      "cart": [],
+      "wishlist": [],
+      "orders": []
+    },
+    {
+      "id": "4fad",
+      "joinDate": "2025-10-29T10:17:19.402Z",
+      "fullName": "anshifa riya",
+      "email": "ria@gmail.com",
+      "password": "12345678",
+      "isBlock": false,
+      "cart": [],
+      "wishlist": [],
+      "orders": []
+    },
+    {
+      "id": "8474",
+      "joinDate": "2025-10-29T12:50:56.609Z",
+      "fullName": "rohi",
+      "email": "rohi@gmail.com",
+      "password": "12345678",
+      "isBlock": false,
+      "cart": [],
+      "wishlist": [],
+      "orders": []
+    },
+    {
+      "id": "8335",
+      "joinDate": "2025-10-30T13:04:09.361Z",
+      "fullName": "afra",
+      "email": "afra@gmail.com",
+      "password": "10001000",
+      "isBlock": false,
+      "isAdmin": false,
+      "cart": [],
+      "wishlist": [],
+      "orders": []
+    },
+    {
+      "id": "9f1c",
+      "joinDate": "2025-11-01T04:58:31.091Z",
+      "fullName": "jasna",
+      "email": "jasna@gmail.com",
+      "password": "12345678",
+      "isBlock": false,
+      "isAdmin": false,
+      "cart": [],
+      "wishlist": [],
+      "orders": []
+    }
+  ],
+  "products": [
+    {
+      "id": "1",
+      "name": "Western Dress",
+      "price": 999,
+      "category": "western"
+    },
+    {
+      "id": "1762167603194",
+      "name": "hyy",
+      "price": "1800",
+      "category": "bags"
+    },
+    {
+      "id": "1762331789988",
+      "name": "sssssssssssssr",
+      "price": "1800",
+      "category": "bags"
+    }
+  ],
+  "orders": [
+    {
+      "id": "1",
+      "user": "Guest",
+      "userId": "guest@example.com",
+      "status": "completed"
+    },
+    {
+      "id": "1761745639450",
+      "user": "rohi",
+      "userId": "rohi@gmail.com",
+      "items": [
+        {
+          "id": "1",
+          "name": "Carmilla Classic Tan Satchel",
+          "oldPrice": "₹2799",
+          "newPrice": "₹2799",
+          "image": "/public/images/bag-1.avif",
+          "details": {
+            "color": "Camel Brown with Dark Chocolate Handles",
+            "material": "Textured Vegan Leather",
+            "style": "Structured Satchel",
+            "features": "Dual top handles, adjustable shoulder strap, gold-tone hardware, inner zip compartment"
+          },
+          "size": "Free Size",
+          "quantity": 1
+        }
+      ],
+      "total": 2799,
+      "paymentMethod": "cod",
+      "address": "eeeeeeeeee",
+      "name": "ffffff",
+      "date": "29/10/2025, 19:17:19",
+      "status": "cancelled"
+    },
+    {
+      "id": "1761801143009",
+      "user": "riya",
+      "userId": "riya@gmail.com",
+      "items": [
+        {
+          "id": "4",
+          "name": "Sunny Bloom Dress",
+          "oldPrice": "₹3200",
+          "newPrice": "₹3000",
+          "sizes": [
+            "M",
+            "L",
+            "XL",
+            "2XL"
+          ],
+          "image": "/public/images/western-4.webp",
+          "details": {
+            "color": "Yellow",
+            "type": "casual",
+            "fabric": "cotton"
+          },
+          "size": "M",
+          "quantity": 1
+        }
+      ],
+      "total": 3000,
+      "paymentMethod": "cod",
+      "address": "qwee",
+      "name": "ayos",
+      "date": "30/10/2025, 10:42:23",
+      "status": "shipped"
+    },
+    {
+      "id": "1761804891245",
+      "user": "riya",
+      "userId": "riya@gmail.com",
+      "items": [
+        {
+          "id": "1761803297674",
+          "name": "Louis Sling Bag",
+          "oldPrice": "₹2000",
+          "newPrice": "₹1800",
+          "image": "https://in.louisvuitton.com/images/is/image/lv/1/P…bb--M26686_PM2_Front%20view.png?wid=2400&hei=2400",
+          "details": {
+            "color": "Black",
+            "material": "leather",
+            "style": "SlingBag"
+          },
+          "size": "Free Size",
+          "quantity": 1
+        }
+      ],
+      "total": 1800,
+      "paymentMethod": "cod",
+      "address": "jkkkkkkkk",
+      "name": "gggggggggg",
+      "date": "30/10/2025, 11:44:51",
+      "status": "pending"
+    },
+    {
+      "id": "1761805540318",
+      "user": "riya",
+      "userId": "riya@gmail.com",
+      "items": [
+        {
+          "id": "1",
+          "name": "Terracotta Suede Pointed Pumps",
+          "oldPrice": "₹2799",
+          "newPrice": "₹2799",
+          "size": "Free Size",
+          "image": "/public/images/shoe-1.jpg",
+          "details": {
+            "color": "Terracotta Brown",
+            "material": "Soft Suede",
+            "style": "Classic Pointed-Toe Pumps",
+            "heelHeight": "3.5 inches",
+            "features": "Slip-on design, cushioned insole, durable outsole"
+          },
+          "quantity": 1
+        }
+      ],
+      "total": 2799,
+      "paymentMethod": "cod",
+      "address": "qqqqqqqqq",
+      "name": "qqqqqqqqqqq",
+      "date": "30/10/2025, 11:55:40",
+      "status": "completed"
+    }
+  ]
+}
