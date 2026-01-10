@@ -27,9 +27,9 @@ function Shop() {
           uniqueId: item.id // Use MongoDB _id as uniqueId
         }));
 
-        const shuffled = products.sort(() => Math.random() - 0.5);
-        setAllItems(shuffled);
-        setFilteredItems(shuffled);
+        // const shuffled = products.sort(() => Math.random() - 0.5);
+        setAllItems(products);
+        setFilteredItems(products);
       })
       .catch((err) => console.error("Error fetching shop data:", err));
   }, []);

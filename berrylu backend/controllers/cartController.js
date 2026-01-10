@@ -1,8 +1,8 @@
+const asyncHandler=require("../utils/asyncHandler")
 const Cart = require("../models/Cart");
 
 //  ADD TO CART
-exports.addToCart = async (req, res) => {
-  try {
+exports.addToCart = asyncHandler(async (req, res) => {
     const userId = req.user.id;
     const { productId, name, image, price, size, quantity } = req.body;
 
@@ -35,24 +35,18 @@ exports.addToCart = async (req, res) => {
 
     await cart.save();
     res.status(200).json(cart);
-  } catch (error) {
-    res.status(500).json({ message: "Add to cart failed", error });
-  }
-};
+
+});
 
 //  GET USER CART
-exports.getCart = async (req, res) => {
-  try {
+exports.getCart = asyncHandler(async (req, res) => {
     const cart = await Cart.findOne({ user: req.user.id });
     res.status(200).json(cart || { items: [] });
-  } catch (error) {
-    res.status(500).json({ message: "Fetch cart failed", error });
-  }
-};
+  
+});
 
 //  UPDATE QUANTITY
-exports.updateCartItem = async (req, res) => {
-  try {
+exports.updateCartItem = asyncHandler(async (req, res) => {
     const { itemId, quantity } = req.body;
 
     const cart = await Cart.findOne({ user: req.user.id });
@@ -65,14 +59,11 @@ exports.updateCartItem = async (req, res) => {
     await cart.save();
 
     res.status(200).json(cart);
-  } catch (error) {
-    res.status(500).json({ message: "Update failed", error });
-  }
-};
+
+});
 
 //  REMOVE ITEM
-exports.removeCartItem = async (req, res) => {
-  try {
+exports.removeCartItem = asyncHandler(async (req, res) => {
     const cart = await Cart.findOne({ user: req.user.id });
     if (!cart) return res.status(404).json({ message: "Cart not found" });
 
@@ -82,20 +73,15 @@ exports.removeCartItem = async (req, res) => {
 
     await cart.save();
     res.status(200).json(cart);
-  } catch (error) {
-    res.status(500).json({ message: "Remove failed", error });
-  }
-};
+ 
+});
 
 //  CLEAR CART
-exports.clearCart = async (req, res) => {
-  try {
+exports.clearCart = asyncHandler(async (req, res) => {
     await Cart.findOneAndUpdate(
       { user: req.user.id },
       { items: [] }
     );
     res.status(200).json({ message: "Cart cleared" });
-  } catch (error) {
-    res.status(500).json({ message: "Clear cart failed", error });
-  }
-};
+ 
+});

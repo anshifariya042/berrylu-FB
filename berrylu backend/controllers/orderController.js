@@ -1,43 +1,34 @@
+const asyncHandler = require("../utils/asyncHandler");
 const Order = require("../models/Order");
 
 // Get all orders
-exports.getAllOrders = async (req, res) => {
-    try {
+exports.getAllOrders = asyncHandler(async (req, res) => {
         const orders = await Order.find({ userId: req.user.email });
         res.json(orders);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-};
+   
+});
 
 // Get single order
-exports.getOrderById = async (req, res) => {
-    try {
+exports.getOrderById = asyncHandler(async (req, res) => {
         const order = await Order.findById(req.params.id);
         if (!order || order.userId !== req.user.email) {
             return res.status(404).json({ message: "Order not found" });
         }
         res.json(order);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-};
+   
+});
 
 // (Checkout)
-exports.createOrder = async (req, res) => {
-    try {
+exports.createOrder = asyncHandler(async (req, res) => {
         const orderData = { ...req.body, userId: req.user.email, user: req.user.name };
         const order = new Order(orderData);
         const newOrder = await order.save();
         res.status(201).json(newOrder);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
-    }
-};
+   
+});
 
 // Cancel Order
-exports.cancelOrder = async (req, res) => {
-    try {
+exports.cancelOrder = asyncHandler(async (req, res) => {
         const order = await Order.findById(req.params.id);
         if (!order || order.userId !== req.user.email) {
             return res.status(404).json({ message: "Order not found" });
@@ -48,9 +39,7 @@ exports.cancelOrder = async (req, res) => {
         order.status = "cancelled";
         await order.save();
         res.json(order);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-};
+    
+});
 
 

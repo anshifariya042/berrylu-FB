@@ -1,8 +1,8 @@
+const asyncHandler = require("../utils/asyncHandler");
 const Wishlist = require("../models/Wishlist");
 
 // Get Wishlist
-exports.getWishlist = async (req, res) => {
-    try {
+exports.getWishlist = asyncHandler(async (req, res) => {
         const userId = req.user.id;
         console.log(`[GET Wishlist] User: ${userId}`);
         let wishlist = await Wishlist.findOne({ user: userId });
@@ -13,15 +13,11 @@ exports.getWishlist = async (req, res) => {
         }
         console.log(`[GET Wishlist] Found ${wishlist.items.length} items.`);
         res.status(200).json(wishlist.items);
-    } catch (error) {
-        console.error("[GET Wishlist] Error:", error);
-        res.status(500).json({ message: "Error fetching wishlist", error });
-    }
-};
+   
+});
 
 // Add to Wishlist
-exports.addToWishlist = async (req, res) => {
-    try {
+exports.addToWishlist = asyncHandler(async (req, res) => {
         const userId = req.user.id;
         const item = req.body; 
         console.log(`[ADD Wishlist] User: ${userId}, Item: ${item.name} (${item.id || item.productId})`);
@@ -55,15 +51,11 @@ exports.addToWishlist = async (req, res) => {
         }
 
         res.status(200).json(wishlist.items);
-    } catch (error) {
-        console.error("[ADD Wishlist] Error:", error);
-        res.status(500).json({ message: "Error adding to wishlist", error });
-    }
-};
+  
+});
 
 // Remove from Wishlist
-exports.removeFromWishlist = async (req, res) => {
-    try {
+exports.removeFromWishlist = asyncHandler(async (req, res) => {
         const userId = req.user.id;
         const { uniqueId } = req.params;
         console.log(`[REMOVE Wishlist] User: ${userId}, Target ID: ${uniqueId}`);
@@ -83,8 +75,5 @@ exports.removeFromWishlist = async (req, res) => {
         }
 
         res.status(200).json(wishlist.items);
-    } catch (error) {
-        console.error("[REMOVE Wishlist] Error:", error);
-        res.status(500).json({ message: "Error removing from wishlist", error });
-    }
-};
+    
+});
