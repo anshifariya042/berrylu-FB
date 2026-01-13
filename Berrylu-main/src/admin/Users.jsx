@@ -1,170 +1,168 @@
 import React, { useEffect, useState } from "react";
 import { FaSearch, FaBan, FaUnlock, FaUserShield } from "react-icons/fa";
-import axios from "axios";
 import toast from "react-hot-toast";
+import api, { mapId } from "../api/api";
 
 export default function Users() {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  // Fetch users
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const res = await api.get("/admin/users");
+      setUsers(mapId(res.data));
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to load users");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchUsers();
   }, []);
 
-  const fetchUsers = async () => {
-    try {
-      const res = await axios.get("http://localhost:4000/users");
-      setUsers(res.data);
-    } catch (err) {
-      console.error("Error fetching users:", err);
-      toast.error("Failed to load users");
-    }
-  };
-
-  // 🧱 Block / Unblock user
   const handleBlockToggle = async (user) => {
     try {
-      const updatedUser = { ...user, blocked: !user.blocked };
-      await axios.put(`http://localhost:4000/users/${user.id}`, updatedUser);
+      const res = await api.put(`/admin/users/${user.id}`, {
+        blocked: !user.blocked,
+      });
 
       setUsers((prev) =>
-        prev.map((u) => (u.id === user.id ? updatedUser : u))
+        prev.map((u) => (u.id === user.id ? mapId(res.data) : u))
       );
 
-      toast.success(
-        updatedUser.blocked
-          ? `${user.fullName} has been blocked`
-          : `${user.fullName} has been unblocked`
-      );
-    } catch (error) {
-      console.error("Error updating user:", error);
-      toast.error("Failed to update user status");
+      toast.success(user.blocked ? "User unblocked" : "User blocked");
+    } catch (err) {
+      toast.error("Update failed");
     }
   };
 
-  // 🛡️ Add / Remove Admin
   const handleAdminToggle = async (user) => {
     try {
-      const updatedUser = { ...user, isAdmin: !user.isAdmin };
-      await axios.put(`http://localhost:4000/users/${user.id}`, updatedUser);
+      const res = await api.put(`/admin/users/${user.id}`, {
+        isAdmin: !user.isAdmin,
+      });
 
       setUsers((prev) =>
-        prev.map((u) => (u.id === user.id ? updatedUser : u))
+        prev.map((u) => (u.id === user.id ? mapId(res.data) : u))
       );
 
-      toast.success(
-        updatedUser.isAdmin
-          ? `${user.fullName} is now an Admin`
-          : `${user.fullName} is no longer an Admin`
-      );
-    } catch (error) {
-      console.error("Error updating admin status:", error);
-      toast.error("Failed to update admin status");
+      toast.success(user.isAdmin ? "Admin removed" : "Admin added");
+    } catch (err) {
+      toast.error("Update failed");
     }
   };
 
-  // 🔍 Filter users
   const filteredUsers = users.filter(
-    (user) =>
-      user.fullName?.toLowerCase().includes(search.toLowerCase()) ||
-      user.email?.toLowerCase().includes(search.toLowerCase())
+    (u) =>
+      u.fullName?.toLowerCase().includes(search.toLowerCase()) ||
+      u.email?.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Users</h1>
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">Users</h1>
 
-      <div className="bg-white p-6 rounded-xl shadow-md">
-        {/* Search bar */}
-        <div className="relative w-full md:w-1/3 mb-5 px-5">
-          <FaSearch className="absolute left-8 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search by name or email"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg  py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-pink-500 shadow-sm"
-          />
-        </div>
+      {/* Search */}
+      <div className="flex items-center gap-3 mb-6">
+        <FaSearch className="text-gray-500" />
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search users..."
+          className="border border-gray-300 p-2 rounded-lg w-1/3 focus:outline-none focus:ring-2 focus:ring-pink-400"
+        />
+      </div>
 
-        {/* Users Table */}
-        {filteredUsers.length > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-sm sm:text-base">
-              <thead>
-                <tr className="bg-pink-100 text-gray-700 text-left">
-                  <th className="py-3 px-4 border-b">#</th>
-                  <th className="py-3 px-4 border-b">Full Name</th>
-                  <th className="py-3 px-4 border-b">Email</th>
-                  <th className="py-3 px-4 border-b"> Block Status</th>
-                  <th className="py-3 px-4 border-b"> Admin Status</th>
-                  <th className="py-3 px-4 border-b text-center">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredUsers.map((user, index) => (
-                  <tr
-                    key={user.id}
-                    className="hover:bg-gray-50 border-b last:border-none"
-                  >
-                    <td className="py-3 px-4">{index + 1}</td>
-                    <td className="py-3 px-4">{user.fullName}</td>
-                    <td className="py-3 px-4">{user.email}</td>
-
-                    <td className="py-3 px-4">
-                      {user.blocked ? (
-                        <span className="text-red-500 font-medium">Blocked</span>
-                      ) : (
-                        <span className="text-green-600 font-medium">Active</span>
-                      )}
-                    </td>
-
-                    <td className="py-3 px-4">
-                      {user.isAdmin ? (
-                        <span className="text-purple-600 font-semibold">
-                          Admin
-                        </span>
-                      ) : (
-                        <span className="text-green-600 font-medium">User</span>
-                      )}
-                    </td>
-
-                    <td className="py-3 px-4 text-center space-x-3">
-
-                      <button
-                        onClick={() => handleBlockToggle(user)}
-                        className={`${user.blocked
-                            ? "text-green-600 hover:text-green-800"
-                            : "text-red-500 hover:text-red-700"
-                          } transition`}
-                        title={user.blocked ? "Unblock User" : "Block User"}
-                      >
-                        {user.blocked ? <FaUnlock /> : <FaBan />}
-                      </button>
-
-                      <button
-                        onClick={() => handleAdminToggle(user)}
-                        className={`${user.isAdmin
-                            ? "text-gray-500 hover:text-gray-700"
-                            : "text-purple-600 hover:text-purple-800"
-                          } transition`}
-                        title={
-                          user.isAdmin
-                            ? "Remove Admin"
-                            : "Promote to Admin"
-                        }
-                      >
-                        <FaUserShield />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+      {/* Table */}
+      <div className="overflow-x-auto bg-white shadow-lg rounded-xl">
+        {loading ? (
+          <p className="p-6 text-center">Loading...</p>
         ) : (
-          <p className="text-gray-500 text-center">No users found.</p>
+          <table className="min-w-full text-sm">
+            <thead className="bg-pink-100 text-gray-700">
+              <tr>
+                <th className="p-3 text-left">#</th>
+                <th className="p-3 text-left">Name</th>
+                <th className="p-3 text-left">Email</th>
+                <th className="p-3 text-center">Status</th>
+                <th className="p-3 text-center">Role</th>
+                <th className="p-3 text-center">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {filteredUsers.map((u, i) => (
+                <tr
+                  key={u.id}
+                  className="border-b hover:bg-gray-50 transition"
+                >
+                  <td className="p-3">{i + 1}</td>
+                  <td className="p-3 font-medium">{u.name}</td>
+                  <td className="p-3 text-gray-600">{u.email}</td>
+
+                  {/* Block status */}
+                  <td className="p-3 text-center">
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        u.blocked
+                          ? "bg-red-100 text-red-600"
+                          : "bg-green-100 text-green-600"
+                      }`}
+                    >
+                      {u.blocked ? "Blocked" : "Active"}
+                    </span>
+                  </td>
+
+                  {/* Role */}
+                  <td className="p-3 text-center">
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        u.isAdmin
+                          ? "bg-purple-100 text-purple-600"
+                          : "bg-blue-100 text-blue-600"
+                      }`}
+                    >
+                      {u.isAdmin ? "Admin" : "User"}
+                    </span>
+                  </td>
+
+                  {/* Actions */}
+                  <td className="p-3 text-center flex justify-center gap-4">
+                    <button
+                      onClick={() => handleBlockToggle(u)}
+                      className={`p-2 rounded-lg text-white ${
+                        u.blocked
+                          ? "bg-green-500 hover:bg-green-600"
+                          : "bg-red-500 hover:bg-red-600"
+                      }`}
+                    >
+                      {u.blocked ? <FaUnlock /> : <FaBan />}
+                    </button>
+
+                    <button
+                      onClick={() => handleAdminToggle(u)}
+                      className="p-2 rounded-lg bg-purple-500 text-white hover:bg-purple-600"
+                    >
+                      <FaUserShield />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+
+              {filteredUsers.length === 0 && (
+                <tr>
+                  <td colSpan="6" className="p-6 text-center text-gray-500">
+                    No users found
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         )}
       </div>
     </div>

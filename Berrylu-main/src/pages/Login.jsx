@@ -36,12 +36,12 @@ function Login() {
       localStorage.setItem("token", token);
       localStorage.setItem("isLoggedIn", "true");
 
-      if (user.role === 'admin') {
+     if (user.isAdmin) {
         toast.success("Welcome Admin!");
         navigate("/admin");
       } else {
         toast.success("Login successful!");
-        navigate('/home')
+        navigate("/home");
       }
 
     } catch (err) {

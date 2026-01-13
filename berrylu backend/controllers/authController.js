@@ -1,12 +1,12 @@
-const asyncHandler = require("../utils/asyncHandler");
-const User = require("../models/User");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const { signupSchema, loginSchema } = require("../validations/userValidation");
+import asyncHandler from "../utils/asyncHandler.js";
+import User from "../models/User.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { signupSchema, loginSchema } from "../validations/userValidation.js";
 
 
-//  SIGNUP
-exports.signUp = asyncHandler(async (req, res) => {
+// SIGNUP
+export const signUp = asyncHandler(async (req, res) => {
 
   const { error } = signupSchema.validate(req.body);
   if (error) {
@@ -40,8 +40,8 @@ exports.signUp = asyncHandler(async (req, res) => {
 });
 
 
-//  LOGIN
-exports.login = asyncHandler(async (req, res) => {
+// LOGIN
+export const login = asyncHandler(async (req, res) => {
 
   const { error } = loginSchema.validate(req.body);
   if (error) {
@@ -53,6 +53,12 @@ exports.login = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
   if (!user) {
     return res.status(400).json({ message: "Invalid credentials" });
+  }
+
+    if (user.blocked) {
+    return res.status(403).json({
+      message: "Your account is blocked. Contact admin.",
+    });
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
@@ -74,10 +80,8 @@ exports.login = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      isAdmin: user.isAdmin,   
+      blocked: user.blocked  
     },
   });
 });
-
-
-
-

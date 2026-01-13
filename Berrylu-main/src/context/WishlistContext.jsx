@@ -1,15 +1,27 @@
-import React,{createContext,useContext,useState} from 'react'
+import React, { createContext, useContext, useState } from "react";
+import api from "../api/api";
 
-const WishlistContext=createContext();
+const WishlistContext = createContext();
+
 export const WishlistProvider = ({ children }) => {
   const [wishlist, setWishlist] = useState([]);
 
-  const addToWishlist = (item) => {
-    setWishlist((prev) => [...prev, item]);
+  // Load wishlist from DB
+  const fetchWishlist = async () => {
+    const res = await api.get("/wishlist");
+    setWishlist(res.data);
   };
 
-  const removeFromWishlist = (uniqueId) => {
-    setWishlist((prev) => prev.filter((i) => i.uniqueId !== uniqueId));
+  // Add item
+  const addToWishlist = async (item) => {
+    const res = await api.post("/wishlist/add", item);
+    setWishlist(res.data);
+  };
+
+  // Remove item
+  const removeFromWishlist = async (uniqueId) => {
+    const res = await api.delete(`/wishlist/remove/${uniqueId}`);
+    setWishlist(res.data);
   };
 
   const isInWishlist = (uniqueId) => {
@@ -18,12 +30,17 @@ export const WishlistProvider = ({ children }) => {
 
   return (
     <WishlistContext.Provider
-      value={{ wishlist, addToWishlist, removeFromWishlist, isInWishlist }}
+      value={{
+        wishlist,
+        addToWishlist,
+        removeFromWishlist,
+        isInWishlist,
+        fetchWishlist,
+      }}
     >
       {children}
     </WishlistContext.Provider>
   );
 };
 
-
-export const useWishlist=()=>useContext(WishlistContext);
+export const useWishlist = () => useContext(WishlistContext);

@@ -1,9 +1,7 @@
-
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { FaEdit, FaTrash, FaCheck, FaTimes, FaPlus } from "react-icons/fa";
+import { FaEdit, FaTrash, FaCheck, FaTimes, FaPlus, FaSearch, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import toast from "react-hot-toast";
-import { FaSearch, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import api, { mapId } from "../api/api";
 
 export default function ProductList() {
   const [products, setProducts] = useState([]);
@@ -28,29 +26,21 @@ export default function ProductList() {
       color: "",
       material: "",
       style: "",
-    }
-
+    },
   });
 
   const [searchTerm, setSearchTerm] = useState("");
   const itemsPerPage = 8;
 
   // ✅ Fetch all products
-  const fetchProducts = () => {
-    Promise.all([
-      axios.get("http://localhost:4000/western"),
-      axios.get("http://localhost:4000/bags"),
-      axios.get("http://localhost:4000/shoes"),
-    ])
-      .then(([westernRes, bagsRes, shoesRes]) => {
-        const combined = [
-          ...westernRes.data.map((p) => ({ ...p, category: "western" })),
-          ...bagsRes.data.map((p) => ({ ...p, category: "bags" })),
-          ...shoesRes.data.map((p) => ({ ...p, category: "shoes" })),
-        ];
-        setProducts(combined);
-      })
-      .catch((err) => console.error("Error fetching products:", err));
+  const fetchProducts = async () => {
+    try {
+      const res = await api.get("/products"); // Backend route: /api/products
+      setProducts(mapId(res.data));
+    } catch (err) {
+      console.error("Error fetching products:", err);
+      toast.error("Failed to fetch products");
+    }
   };
 
   useEffect(() => {
@@ -58,13 +48,11 @@ export default function ProductList() {
   }, []);
 
   // ✅ Delete product
-  const handleDelete = async (category, id) => {
+  const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
     try {
-      await axios.delete(`http://localhost:4000/${category}/${id}`);
-      setProducts((prev) =>
-        prev.filter((p) => !(p.category === category && p.id === id))
-      );
+      await api.delete(`/products/${id}`);
+      setProducts((prev) => prev.filter((p) => p.id !== id));
       toast.success("Product deleted successfully!");
     } catch (error) {
       console.error("Delete failed:", error);
@@ -79,7 +67,7 @@ export default function ProductList() {
       name: product.name,
       image: product.image,
       oldPrice: product.oldPrice || "",
-      newPrice: product.newPrice || "",
+      newPrice: product.newPrice || product.price || "",
     });
   };
 
@@ -94,17 +82,11 @@ export default function ProductList() {
 
   const handleSaveEdit = async () => {
     try {
-      await axios.put(
-        `http://localhost:4000/${editingProduct.category}/${editingProduct.id}`,
-        { ...editingProduct, ...editForm }
-      );
+      const updatedProduct = { ...editingProduct, ...editForm };
+      const res = await api.put(`/products/${editingProduct.id}`, updatedProduct);
 
       setProducts((prev) =>
-        prev.map((p) =>
-          p.id === editingProduct.id && p.category === editingProduct.category
-            ? { ...p, ...editForm }
-            : p
-        )
+        prev.map((p) => (p.id === editingProduct.id ? mapId(res.data) : p))
       );
 
       toast.success("Product updated successfully!");
@@ -115,22 +97,17 @@ export default function ProductList() {
     }
   };
 
+  
+
+
   // ✅ Toggle Stock Status
   const handleStockToggle = async (product) => {
     try {
       const updatedProduct = { ...product, inStock: !product.inStock };
-
-      await axios.put(
-        `http://localhost:4000/${product.category}/${product.id}`,
-        updatedProduct
-      );
+      const res = await api.put(`/products/${product.id}`, updatedProduct);
 
       setProducts((prev) =>
-        prev.map((p) =>
-          p.id === product.id && p.category === product.category
-            ? updatedProduct
-            : p
-        )
+        prev.map((p) => (p.id === product.id ? mapId(res.data) : p))
       );
 
       toast.success(
@@ -145,56 +122,34 @@ export default function ProductList() {
   };
 
 
+  
+
+
   // ✅ Add Product
   const handleAddProduct = async (e) => {
     e.preventDefault();
 
     const productData = {
-      id: Date.now().toString(),
       name: newProduct.name,
       image: newProduct.image,
       oldPrice: newProduct.oldPrice,
       newPrice: newProduct.newPrice,
+      category: newProduct.category,
       inStock: true,
-      details: {
-        color: newProduct.details.color,
-        material: newProduct.details.material,
-        style: newProduct.details.style,
-      }
-
+      details: newProduct.details,
     };
 
     try {
-      await axios.post(
-        `http://localhost:4000/${newProduct.category}`,
-        productData
-      );
-      await axios.post(`http://localhost:4000/products`, {
-        id: productData.id,
-        name: productData.name,
-        price: productData.newPrice,
-        category: newProduct.category,
-      });
+      const res = await api.post("/products", productData);
+      setProducts((prev) => [mapId(res.data), ...prev]);
       toast.success("Product added successfully!");
-
-      // Refresh or update list instantly
-      setProducts((prev) => [
-        { ...productData, category: newProduct.category },
-        ...prev,
-      ]);
-
       setNewProduct({
         name: "",
         image: "",
         oldPrice: "",
         newPrice: "",
         category: "western",
-        details: {
-          color: "",
-          material: "",
-          style: "",
-        }
-
+        details: { color: "", material: "", style: "" },
       });
       setShowAddForm(false);
     } catch (error) {
@@ -232,21 +187,16 @@ export default function ProductList() {
         </button>
       </div>
 
-      {/* ✅ Add Product Form */}
+      {/* Add Product Form */}
       {showAddForm && (
-        <form
-          onSubmit={handleAddProduct}
-          className="bg-white p-6 rounded-lg shadow-md mb-8 space-y-4"
-        >
+        <form onSubmit={handleAddProduct} className="bg-white p-6 rounded-lg shadow-md mb-8 space-y-4">
           <div className="grid md:grid-cols-3 gap-4">
             <input
               type="text"
               name="name"
               placeholder="Product Name"
               value={newProduct.name}
-              onChange={(e) =>
-                setNewProduct({ ...newProduct, name: e.target.value })
-              }
+              onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
               className="border p-2 rounded"
               required
             />
@@ -255,18 +205,14 @@ export default function ProductList() {
               name="image"
               placeholder="Image URL"
               value={newProduct.image}
-              onChange={(e) =>
-                setNewProduct({ ...newProduct, image: e.target.value })
-              }
+              onChange={(e) => setNewProduct({ ...newProduct, image: e.target.value })}
               className="border p-2 rounded"
               required
             />
             <select
               name="category"
               value={newProduct.category}
-              onChange={(e) =>
-                setNewProduct({ ...newProduct, category: e.target.value })
-              }
+              onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
               className="border p-2 rounded"
             >
               <option value="western">Western</option>
@@ -278,9 +224,7 @@ export default function ProductList() {
               name="oldPrice"
               placeholder="Old Price"
               value={newProduct.oldPrice}
-              onChange={(e) =>
-                setNewProduct({ ...newProduct, oldPrice: e.target.value })
-              }
+              onChange={(e) => setNewProduct({ ...newProduct, oldPrice: e.target.value })}
               className="border p-2 rounded"
             />
             <input
@@ -288,9 +232,7 @@ export default function ProductList() {
               name="newPrice"
               placeholder="New Price"
               value={newProduct.newPrice}
-              onChange={(e) =>
-                setNewProduct({ ...newProduct, newPrice: e.target.value })
-              }
+              onChange={(e) => setNewProduct({ ...newProduct, newPrice: e.target.value })}
               className="border p-2 rounded"
               required
             />
@@ -303,10 +245,7 @@ export default function ProductList() {
               placeholder="Color"
               value={newProduct.details.color}
               onChange={(e) =>
-                setNewProduct({
-                  ...newProduct,
-                  details: { ...newProduct.details, color: e.target.value },
-                })
+                setNewProduct({ ...newProduct, details: { ...newProduct.details, color: e.target.value } })
               }
               className="border p-2 rounded"
             />
@@ -315,10 +254,7 @@ export default function ProductList() {
               placeholder="Material"
               value={newProduct.details.material}
               onChange={(e) =>
-                setNewProduct({
-                  ...newProduct,
-                  details: { ...newProduct.details, material: e.target.value },
-                })
+                setNewProduct({ ...newProduct, details: { ...newProduct.details, material: e.target.value } })
               }
               className="border p-2 rounded"
             />
@@ -327,38 +263,31 @@ export default function ProductList() {
               placeholder="Style"
               value={newProduct.details.style}
               onChange={(e) =>
-                setNewProduct({
-                  ...newProduct,
-                  details: { ...newProduct.details, style: e.target.value },
-                })
+                setNewProduct({ ...newProduct, details: { ...newProduct.details, style: e.target.value } })
               }
               className="border p-2 rounded"
             />
           </div>
 
-
-          <button
-            type="submit"
-            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg"
-          >
+          <button type="submit" className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
             Save Product
           </button>
         </form>
       )}
 
-      {/* 🔍 Search Bar */}
-      <div className=" w-full  md:w-full flex items-center gap-2 mb-5 px-5 ">
+      {/* Search Bar */}
+      <div className="w-full md:w-1/3 flex items-center gap-2 mb-5 px-5">
         <FaSearch className="text-gray-400" />
         <input
           type="text"
           placeholder="Search by name or category..."
-          className="w-full md:w-1/3 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
+          className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
 
-      {/* ✅ Product Table */}
+      {/* Product Table */}
       <div className="overflow-x-auto bg-white shadow-md rounded-xl">
         <table className="min-w-full text-sm sm:text-base">
           <thead>
@@ -375,128 +304,59 @@ export default function ProductList() {
           <tbody>
             {currentProducts.length > 0 ? (
               currentProducts.map((product) => (
-                <tr
-                  key={`${product.category}-${product.id}`}
-                  className="border-t hover:bg-gray-50"
-                >
+                <tr key={product.id} className="border-t hover:bg-gray-50">
                   <td className="p-4">
                     {editingProduct?.id === product.id ? (
-                      <input
-                        type="text"
-                        name="image"
-                        value={editForm.image}
-                        onChange={handleInputChange}
-                        className="border p-1 w-full rounded"
-                      />
+                      <input type="text" name="image" value={editForm.image} onChange={handleInputChange} className="border p-1 w-full rounded" />
                     ) : (
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-16 h-16 object-cover rounded-lg"
-                      />
+                      <img src={product.image} alt={product.name} className="w-16 h-16 object-cover rounded-lg" />
                     )}
                   </td>
-
                   <td className="p-4">
                     {editingProduct?.id === product.id ? (
-                      <input
-                        type="text"
-                        name="name"
-                        value={editForm.name}
-                        onChange={handleInputChange}
-                        className="border p-1 w-full rounded"
-                      />
+                      <input type="text" name="name" value={editForm.name} onChange={handleInputChange} className="border p-1 w-full rounded" />
                     ) : (
                       <span className="font-medium text-gray-800">{product.name}</span>
                     )}
                   </td>
-
                   <td className="p-4 capitalize text-gray-600">{product.category}</td>
-
                   <td className="p-4">
                     {editingProduct?.id === product.id ? (
-                      <input
-                        type="number"
-                        name="oldPrice"
-                        value={editForm.oldPrice}
-                        onChange={handleInputChange}
-                        className="border p-1 w-full rounded"
-                      />
+                      <input type="number" name="oldPrice" value={editForm.oldPrice} onChange={handleInputChange} className="border p-1 w-full rounded" />
                     ) : (
-                      <span className="text-gray-500 line-through">
-                        ₹{product.oldPrice}
-                      </span>
+                      <span className="text-gray-500 line-through">₹{product.oldPrice}</span>
                     )}
                   </td>
-
                   <td className="p-4">
                     {editingProduct?.id === product.id ? (
-                      <input
-                        type="number"
-                        name="newPrice"
-                        value={editForm.newPrice}
-                        onChange={handleInputChange}
-                        className="border p-1 w-full rounded"
-                      />
+                      <input type="number" name="newPrice" value={editForm.newPrice} onChange={handleInputChange} className="border p-1 w-full rounded" />
                     ) : (
-                      <span className="text-pink-600 font-semibold">
-                        ₹{product.newPrice || product.price}
-                      </span>
+                      <span className="text-pink-600 font-semibold">₹{product.newPrice || product.price}</span>
                     )}
                   </td>
-
-                  {/* ✅ Stock column */}
                   <td className="p-4 text-center">
-                    <span
-                      className={`${product.inStock ? "text-green-600" : "text-red-500"
-                        } font-semibold`}
-                    >
+                    <span className={`${product.inStock ? "text-green-600" : "text-red-500"} font-semibold`}>
                       {product.inStock ? "In Stock" : "Out of Stock"}
                     </span>
                     <br />
                     <button
                       onClick={() => handleStockToggle(product)}
-                      className={`mt-2 flex items-center justify-center text-xl transition ${product.inStock
-                          ? "text-red-500 hover:text-red-700"
-                          : "text-green-600 hover:text-green-800"
-                        } transition`}
+                      className={`mt-2 flex items-center justify-center text-xl ${product.inStock ? "text-red-500 hover:text-red-700" : "text-green-600 hover:text-green-800"}`}
                       title={product.inStock ? "Mark Out of Stock" : "Mark In Stock"}
                     >
                       {product.inStock ? <FaTimesCircle /> : <FaCheckCircle />}
                     </button>
                   </td>
-
-                  {/* ✅ Edit / Delete buttons */}
                   <td className="p-4 text-center space-x-3">
                     {editingProduct?.id === product.id ? (
                       <>
-                        <button
-                          onClick={handleSaveEdit}
-                          className="text-green-600 hover:text-green-800"
-                        >
-                          <FaCheck />
-                        </button>
-                        <button
-                          onClick={handleCancelEdit}
-                          className="text-gray-600 hover:text-gray-800"
-                        >
-                          <FaTimes />
-                        </button>
+                        <button onClick={handleSaveEdit} className="text-green-600 hover:text-green-800"><FaCheck /></button>
+                        <button onClick={handleCancelEdit} className="text-gray-600 hover:text-gray-800"><FaTimes /></button>
                       </>
                     ) : (
                       <>
-                        <button
-                          onClick={() => handleEditClick(product)}
-                          className="text-blue-600 hover:text-blue-800"
-                        >
-                          <FaEdit />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(product.category, product.id)}
-                          className="text-red-600 hover:text-red-800"
-                        >
-                          <FaTrash />
-                        </button>
+                        <button onClick={() => handleEditClick(product)} className="text-blue-600 hover:text-blue-800"><FaEdit /></button>
+                        <button onClick={() => handleDelete(product.id)} className="text-red-600 hover:text-red-800"><FaTrash /></button>
                       </>
                     )}
                   </td>
@@ -504,34 +364,19 @@ export default function ProductList() {
               ))
             ) : (
               <tr>
-                <td colSpan="7" className="p-6 text-center text-gray-500">
-                  No matching products found.
-                </td>
+                <td colSpan="7" className="p-6 text-center text-gray-500">No matching products found.</td>
               </tr>
             )}
           </tbody>
-
         </table>
       </div>
 
-      {/* ✅ Pagination */}
+      {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex justify-center items-center mt-6 space-x-2">
-          <button
-            disabled={currentPage === 1}
-            onClick={() => handlePageChange(currentPage - 1)}
-            className="px-4 py-2 border rounded-lg bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
-          >
-            Prev
-          </button>
+          <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} className="px-4 py-2 border rounded-lg bg-gray-100 hover:bg-gray-200 disabled:opacity-50">Prev</button>
           <span className="px-4">{currentPage}</span>
-          <button
-            disabled={currentPage === totalPages}
-            onClick={() => handlePageChange(currentPage + 1)}
-            className="px-4 py-2 border rounded-lg bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
-          >
-            Next
-          </button>
+          <button disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)} className="px-4 py-2 border rounded-lg bg-gray-100 hover:bg-gray-200 disabled:opacity-50">Next</button>
         </div>
       )}
     </div>

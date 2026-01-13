@@ -1,10 +1,17 @@
-const express = require("express");
-const cors = require("cors");
-const errorHandler=require("./middleware/errorMiddleware")
-const authRoutes = require("./routes/authRoutes");
+import express from "express";
+import cors from "cors";
+
+import errorHandler from "./middleware/errorMiddleware.js";
+import authRoutes from "./routes/authRoutes.js";
+import productRoutes from "./routes/productRoutes.js";
+import cartRoutes from "./routes/cartRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
+import wishlistRoutes from "./routes/wishlistRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
 
 const app = express();
 
+// Middleware
 app.use(express.json());
 
 app.use(
@@ -14,15 +21,15 @@ app.use(
   })
 );
 
-const productRoutes = require("./routes/productRoutes");
-const cartRoutes = require("./routes/cartRoutes");
-const orderRoutes = require("./routes/orderRoutes");
-const wishlistRoutes = require("./routes/wishlistRoutes");
-
+// Routes
+app.use("/api/admin", adminRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api", orderRoutes);
 app.use("/api/wishlist", wishlistRoutes);
+
+// Error Handler
 app.use(errorHandler);
-module.exports = app;
+
+export default app;
