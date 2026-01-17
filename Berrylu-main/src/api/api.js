@@ -18,21 +18,6 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// ✅ FIXED mapper
-// export const mapId = (item) => {
-//   if (Array.isArray(item)) {
-//     return item.map((i) => ({
-//       ...i,
-//       id: i._id,
-//     }));
-//   }
-
-//   return {
-//     ...item,
-//     id: item._id,
-//     name: item.fullName,
-//   };
-// };
 
 export const mapId = (item) => {
   if (Array.isArray(item)) {
@@ -42,7 +27,7 @@ export const mapId = (item) => {
   return {
     ...item,
     id: item._id,
-    name: item.fullName || item.name, // ✅ works for BOTH users & products
+    name: item.fullName || item.name, 
   };
 };
 

@@ -24,10 +24,8 @@ function Shop() {
       .then((res) => {
         const products = mapId(res.data).map(item => ({
           ...item,
-          uniqueId: item.id // Use MongoDB _id as uniqueId
+          uniqueId: item.id 
         }));
-
-        // const shuffled = products.sort(() => Math.random() - 0.5);
         setAllItems(products);
         setFilteredItems(products);
       })
@@ -37,23 +35,14 @@ function Shop() {
   // Handle Filter + Sort
   useEffect(() => {
     let items = [...allItems];
-
-    // Category filter
     if (selectedCategory !== "all") {
       items = items.filter((item) => item.category === selectedCategory);
     }
-
-    // Sorting
     if (sortOrder === "low-high") {
-      items.sort(
-        (a, b) => (a.newPrice || a.price) - (b.newPrice || b.price)
-      );
+      items.sort((a, b) => (a.newPrice || a.price) - (b.newPrice || b.price));
     } else if (sortOrder === "high-low") {
-      items.sort(
-        (a, b) => (b.newPrice || b.price) - (a.newPrice || a.price)
-      );
+      items.sort((a, b) => (b.newPrice || b.price) - (a.newPrice || a.price));
     }
-
     setFilteredItems(items);
     setCurrentPage(1);
   }, [selectedCategory, sortOrder, allItems]);
@@ -77,111 +66,116 @@ function Shop() {
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div className="py-20 bg-gray-50 min-h-screen mt-8">
-      {/*  Filter + Sorting Bar */}
-      <div className="flex flex-col sm:flex-row justify-between items-center max-w-7xl mx-auto mb-6 px-6 gap-4">
-        {/* Category Filter */}
-        <select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          className="border rounded-lg px-4 py-2"
-        >
-          <option value="all">All Categories</option>
-          <option value="western">Western</option>
-          <option value="bags">Bags</option>
-          <option value="shoes">Shoes</option>
-        </select>
+    <div className="py-24 bg-[#fcfcfc] min-h-screen">
+      {/* 🌟 Header Section */}
+      <div className="text-center mb-12 px-6">        
+      </div>
 
-        {/* Sorting */}
-        <select
-          value={sortOrder}
-          onChange={(e) => setSortOrder(e.target.value)}
-          className="border rounded-lg px-4 py-2"
-        >
-          <option value="none">Sort by</option>
-          <option value="low-high">Price: Low to High</option>
-          <option value="high-low">Price: High to Low</option>
-        </select>
+      {/* 🛠️ Filter + Sorting Bar */}
+      <div className="max-w-7xl mx-auto mb-12 px-6">
+        <div className="bg-white p-4 rounded-[2rem] shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex items-center gap-4 w-full md:w-auto">
+            <span className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-4 hidden sm:block">Filter By:</span>
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="bg-gray-50 border-none rounded-xl px-6 py-3 text-sm font-bold text-gray-700 focus:ring-2 focus:ring-pink-500 transition-all outline-none cursor-pointer w-full md:w-48"
+            >
+              <option value="all">All Categories</option>
+              <option value="western">Western Wear</option>
+              <option value="bags"> Bags</option>
+              <option value="shoes">Footwear</option>
+            </select>
+          </div>
+
+          <div className="flex items-center gap-4 w-full md:w-auto">
+            <span className="text-[10px] font-black uppercase tracking-widest text-gray-400 hidden sm:block">Sort By:</span>
+            <select
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value)}
+              className="bg-gray-50 border-none rounded-xl px-6 py-3 text-sm font-bold text-gray-700 focus:ring-2 focus:ring-pink-500 transition-all outline-none cursor-pointer w-full md:w-48"
+            >
+              <option value="none">Default Sorting</option>
+              <option value="low-high">Price: Low to High</option>
+              <option value="high-low">Price: High to Low</option>
+            </select>
+          </div>
+        </div>
       </div>
 
       {/* 🛍️ Product Grid */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-6">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 px-6">
         {currentItems.map((item) => {
           const inStock = item.inStock !== false;
 
           return (
             <div
               key={item.uniqueId}
-              className="relative bg-white shadow-md rounded-2xl overflow-hidden hover:shadow-lg transition"
+              className="group relative bg-white border border-gray-100 rounded-[2.5rem] overflow-hidden hover:shadow-2xl transition-all duration-500 flex flex-col h-full"
             >
               {/* ❤️ Wishlist Icon */}
               <button
                 onClick={() => toggleWishlist(item)}
-                className="absolute top-3 right-3 z-10 bg-white rounded-full p-2 shadow-sm hover:bg-pink-50 transition"
+                className="absolute top-5 right-5 z-20 bg-white/90 backdrop-blur-md p-3 rounded-full shadow-lg hover:bg-pink-50 transition-colors"
               >
                 {isInWishlist(item.uniqueId) ? (
-                  <FaHeart size={22} color="red" />
+                  <FaHeart size={18} className="text-red-500" />
                 ) : (
-                  <FaRegHeart size={22} color="black" />
+                  <FaRegHeart size={18} className="text-gray-400" />
                 )}
               </button>
 
-              {/* 🏷️ Stock Badge */}
-              <div
-                className={`absolute top-3 left-3 px-3 py-1 z-20 text-xs font-semibold rounded-full ${inStock
-                  ? "bg-green-100 text-green-700"
-                  : "bg-red-100 text-red-700"
-                  }`}
-              >
-                {inStock ? "In Stock" : "Out of Stock"}
+              {/* 🏷️ Category Tag */}
+              <div className="absolute top-6 left-6 z-20">
+                <span className="bg-gray-900/10 backdrop-blur-md text-gray-900 text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full">
+                  {item.category}
+                </span>
               </div>
 
               {/* 🖼️ Product Image */}
-              <Link to={`/product/${item.category}/${item.id}`}>
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-80 h-80 object-cover transition-transform duration-300 hover:scale-105"
-                />
-              </Link>
+              <div className="relative overflow-hidden aspect-[4/5]">
+                <Link to={`/product/${item.category}/${item.id}`}>
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ${!inStock && 'grayscale opacity-50'}`}
+                  />
+                </Link>
+                {!inStock && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="bg-white/90 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">Sold Out</span>
+                  </div>
+                )}
+              </div>
 
               {/* 📦 Product Details */}
-              <div className="p-4 text-center flex flex-col justify-between">
-                <h2 className="text-lg font-semibold text-gray-800">
+              <div className="p-6 text-center flex flex-col flex-grow">
+                <h2 className="text-lg font-bold text-gray-800 mb-2 truncate group-hover:text-pink-600 transition-colors">
                   {item.name}
                 </h2>
 
-                <div className="flex justify-center gap-2 mt-1">
+                <div className="flex justify-center items-center gap-3 mb-6">
+                  <p className="text-2xl font-black text-gray-900">
+                    ₹{item.newPrice || item.price}
+                  </p>
                   {item.oldPrice && (
-                    <p className="text-gray-400 line-through text-sm">
+                    <p className="text-sm text-gray-400 line-through font-medium">
                       ₹{item.oldPrice}
                     </p>
                   )}
-                  <p className="text-pink-600 font-medium">
-                    ₹{item.newPrice || item.price}
-                  </p>
                 </div>
 
-                <p className="text-sm text-gray-500">{item.category}</p>
-
-                {/* 🛒 Add to Cart */}
-                {inStock ? (
-                  <button
-                    onClick={() => {
-                      addToCart(item);
-                    }}
-                    className="mt-3 bg-pink-600 text-white px-4 py-2 rounded-lg hover:bg-pink-700 transition"
-                  >
-                    Add to Cart
-                  </button>
-                ) : (
-                  <button
-                    disabled
-                    className="mt-3 bg-gray-300 text-gray-600 px-4 py-2 rounded-lg cursor-not-allowed"
-                  >
-                    Out of Stock
-                  </button>
-                )}
+                <button
+                  onClick={() => inStock && addToCart(item)}
+                  disabled={!inStock}
+                  className={`mt-auto w-full py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all duration-300 transform active:scale-95 ${
+                    inStock
+                      ? "bg-gray-900 text-white hover:bg-pink-600 shadow-xl shadow-gray-200"
+                      : "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  }`}
+                >
+                  {inStock ? "Add to cart" : "Notify Me"}
+                </button>
               </div>
             </div>
           );
@@ -189,20 +183,23 @@ function Shop() {
       </div>
 
       {/* 📄 Pagination Controls */}
-      <div className="flex justify-center mt-10 space-x-2">
-        {[...Array(totalPages)].map((_, index) => (
-          <button
-            key={index}
-            onClick={() => handlePageChange(index + 1)}
-            className={`px-4 py-2 rounded-full ${currentPage === index + 1
-              ? "bg-pink-600 text-white"
-              : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-16 space-x-3">
+          {[...Array(totalPages)].map((_, index) => (
+            <button
+              key={index}
+              onClick={() => handlePageChange(index + 1)}
+              className={`w-12 h-12 rounded-2xl font-black text-xs transition-all duration-300 transform active:scale-90 ${
+                currentPage === index + 1
+                  ? "bg-pink-600 text-white shadow-lg shadow-pink-200"
+                  : "bg-white text-gray-400 hover:bg-gray-50 border border-gray-100"
               }`}
-          >
-            {index + 1}
-          </button>
-        ))}
-      </div>
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
