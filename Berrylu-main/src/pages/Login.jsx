@@ -133,8 +133,8 @@ function Login() {
         email: form.email,
         password: form.password
       });
-
-      const { user, token } = response.data;
+      
+const { user, refreshToken } = response.data;
 
       if (user.blocked) {
         toast.error("Your account has been blocked. please contact admin.");
@@ -142,7 +142,7 @@ function Login() {
       }
 
       localStorage.setItem("currentUser", JSON.stringify(user));
-      localStorage.setItem("token", token);
+      localStorage.setItem("token", refreshToken);
       localStorage.setItem("isLoggedIn", "true");
 
       if (user.isAdmin) {

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -15,9 +15,8 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
-
 
 export const mapId = (item) => {
   if (Array.isArray(item)) {
@@ -27,9 +26,8 @@ export const mapId = (item) => {
   return {
     ...item,
     id: item._id,
-    name: item.fullName || item.name, 
+    name: item.fullName || item.name,
   };
 };
-
 
 export default api;

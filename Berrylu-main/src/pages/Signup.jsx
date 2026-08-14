@@ -206,7 +206,7 @@ function Signup() {
           password: "",
           confirmPassword: "",
         });
-        navigate("/login");
+        navigate("/home");
       } catch (err) {
         console.error(err);
         const message = err.response?.data?.message || "Something went wrong. please try again";

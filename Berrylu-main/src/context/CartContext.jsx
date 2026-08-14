@@ -98,6 +98,7 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+
   const removeFromCart = async (id, size) => {
     if (isLoggedIn) {
       try {

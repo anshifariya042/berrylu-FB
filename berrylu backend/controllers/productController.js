@@ -25,3 +25,15 @@ export const getProductById = asyncHandler(async (req, res) => {
 
   res.json(product);
 });
+
+
+// SEARCH PRODUCTS BY NAME
+// export const searchProducts = asyncHandler(async (req, res) => {
+//   const keyword = req.query.q;
+
+//   const products = await Product.find({
+//     name: { $regex: keyword, $options: "i" } // case-insensitive search
+//   });
+
+//   res.json(products);
+// });

@@ -203,9 +203,20 @@ export default function ProductList() {
                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
-              {currentProducts.map((product) => (
-                <tr key={product.id} className="hover:bg-slate-50/50 transition-colors">
+         <tbody className="divide-y divide-slate-100">
+
+  {currentProducts.length === 0 ? (
+    <tr>
+      <td colSpan="5" className="py-16 text-center">
+        <div className="flex flex-col items-center gap-3 text-slate-400">
+          <FaBoxOpen size={40} />
+          <p className="font-semibold text-sm">Product not found</p>
+        </div>
+      </td>
+    </tr>
+  ) : (
+    currentProducts.map((product) => (
+      <tr key={product.id} className="hover:bg-slate-50/50 transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-4">
                       {editingProduct?.id === product.id ? (
@@ -269,7 +280,8 @@ export default function ProductList() {
                     </div>
                   </td>
                 </tr>
-              ))}
+              ))
+            )}
             </tbody>
           </table>
         </div>

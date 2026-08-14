@@ -41,7 +41,7 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import Footer from "../components/Footer";
+// import Footer from "../components/Footer";
 
 function Home() {
   return (
@@ -78,7 +78,7 @@ function Home() {
         {/* Visual Element: Bottom Fade */}
         <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/20 to-transparent"></div>
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }
